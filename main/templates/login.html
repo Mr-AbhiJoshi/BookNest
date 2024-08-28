@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+<form method='POST' class='form-control' style="width:450px; margin: auto; margin-top:1rem">
+    {{ form.hidden_tag() }}
+    <h1 class="h3 mb-3 fw-normal">Please Login to Your Account</h1>
+
+    <div class="mb-3">
+        {{ form.username.label() }}
+        {{ form.username(class="form-control my-2", placeholder='e.g. John') }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.password.label() }}
+        {{ form.password(class='form-control my-2', placeholder='********') }}
+    </div>
+
+    {{ form.submit(class="btn btn-primary w-100 py-2 mb-3") }}
+</form>
+<br />
+<div class="text-center">
+    <h6>Don't have an account?</h6>
+    <a class='btn btn-sm btn-secondary' href="{{ url_for('register_page') }}">Register</a>
+</div>
+
+{% endblock %}

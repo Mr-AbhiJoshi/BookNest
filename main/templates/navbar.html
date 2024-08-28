@@ -1,0 +1,47 @@
+{% if navbar == 'alternate' %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('home_page') }}">
+      <img src="static/logo.png" alt="BN" width="35" height="30" class="d-inline-block align-text-top">
+      BookNest
+    </a>
+  </div>
+</nav>
+
+{% else %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('home_page') }}">
+            <img src="static/logo.png" alt="Logo" width="35" height="30" class="d-inline-block align-text-top">
+            BookNest
+        </a>
+        <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarColor02"
+        aria-controls="navbarColor02"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor02">
+        <form class="d-flex mx-auto" method="GET" action="">
+          <input
+            class="form-control me-2"
+            type="text"
+            name="q"
+            placeholder="Search for anything you like..."
+            style="width: 400px;"
+          />
+        </form>
+        <a class="btn btn-warning btn-outline-dark ms-3" href="#" style="width: absolute;">My Account</a>
+        <a class="btn btn-light btn-outline-dark ms-3" href="{{ url_for('logout_page') }}" style="width: 100px;">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+{% endif %}
