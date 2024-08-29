@@ -2,7 +2,7 @@ from main import app, db
 from flask import render_template,redirect,url_for, flash
 from main.models import User, Book, Author, Genre, Review 
 from main.forms import RegisterForm, LoginForm
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 
 @app.route("/")
@@ -55,3 +55,7 @@ def logout_page():
 	logout_user()
 	flash("You have been logged out!", category='info')
 	return redirect( url_for("login_page"))
+
+@app.route('/account')
+def account_page():
+    return render_template('account.html', user=current_user)
