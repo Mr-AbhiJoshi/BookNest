@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block body %}
+
+<style>
+    /* Gradient Background */
+    body {
+        background: linear-gradient(135deg, #8e9eab 0%, #eef2f3 100%);
+        font-family: 'Roboto', sans-serif;
+        color: #333;
+    }
+
+    .container {
+        margin-top: 50px;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-preview {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .book-cover {
+        flex: 1;
+        max-width: 300px;
+        margin-right: 30px;
+    }
+
+    .book-cover img {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .book-details {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .book-details h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .book-details p {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        color: #2c3e50;
+    }
+
+    .book-description {
+        margin-top: 20px;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #34495e;
+    }
+
+    .book-actions {
+        margin-top: 30px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .book-actions .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 50px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
+
+    .book-actions .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+
+    .book-actions .btn-primary:hover {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+
+    .book-actions .btn-secondary {
+        background-color: #e67e22;
+        border-color: #e67e22;
+    }
+
+    .book-actions .btn-secondary:hover {
+        background-color: #d35400;
+        border-color: #d35400;
+    }
+
+    @media (max-width: 768px) {
+        .book-cover {
+            margin-right: 0;
+            margin-bottom: 20px;
+            max-width: 100%;
+        }
+
+        .book-details {
+            flex: 1 1 100%;
+        }
+
+        .book-preview {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="book-preview">
+    <div class="book-cover">
+        <img src="{{ url_for('static', filename='images/' + book.title + '.jpg') }}" alt="{{ book.title }}">
+    </div>
+    <div class="book-details">
+        <h2>{{ book.title }}</h2>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Genre:</strong> {{ book.genre }}</p>
+        <p><strong>Published Date:</strong> {{ book.published_date }}</p>
+        <div class="book-description">
+            <p>{{ book.description }}</p>
+        </div>
+        <div class="book-actions">
+            <a href="{{ url_for('read_book', book_id=book.id) }}" class="btn btn-primary">Read Now</a>
+            <a href="{{ url_for('review_book', book_id=book.id) }}" class="btn btn-secondary">Review</a>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

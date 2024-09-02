@@ -6,6 +6,12 @@ from flask_login import UserMixin
 def load_user(user_id):
 	return User.query.get(int(user_id))
 
+class UserBook(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    start_date = db.Column(db.DateTime, default=datetime.now)
+    is_reading = db.Column(db.Boolean, default=True)  # Track if the book is being read
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,6 +19,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    books = db.relationship('UserBook', backref='user', lazy=True)
     
     @property
     def password(self):
@@ -28,14 +35,20 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return self.username
 
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    books = db.relationship('Book', backref='category', lazy=True)
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    cover_image = db.Column(db.String(200), nullable=True)  # Image path
     published_date = db.Column(db.Date, nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    readers = db.relationship('UserBook', backref='book', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     
     def __str__(self):

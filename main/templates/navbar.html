@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ url_for('home_page') }}">
-      <img src="static/logo.png" alt="BN" width="35" height="30" class="d-inline-block align-text-top">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="BN" width="35" height="30" class="d-inline-block align-text-top">
       BookNest
     </a>
   </div>
@@ -14,7 +14,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('home_page') }}">
-            <img src="static/logo.png" alt="Logo" width="35" height="30" class="d-inline-block align-text-top">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="35" height="30" class="d-inline-block align-text-top">
             BookNest
         </a>
         <button
