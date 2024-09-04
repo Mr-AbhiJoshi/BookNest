@@ -4,6 +4,7 @@ from main.models import User, Book, Author, Genre, Review, Category, UserBook
 from main.forms import RegisterForm, LoginForm, EditProfileForm, ReviewForm
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.orm import joinedload
+from sqlalchemy import func
 import random
 
 @app.route("/")
@@ -149,11 +150,44 @@ def review_book(book_id):
 
     return render_template('review.html', form=form, book=book)
 
-@app.route('/review/delete/<int:review_id>', methods=['POST'])
+@app.route('/review/delete/<int:review_id>/<int:book_id>', methods=['POST'])
 @login_required
-def delete_review(review_id):
+def delete_review(review_id,book_id):
     review = Review.query.get_or_404(review_id)
     db.session.delete(review)
     db.session.commit()
     flash('Your review has been deleted.', category='success')
-    return redirect(url_for('home_page'))
+    return redirect(url_for('preview_page', book_id=book_id))
+
+@app.route('/review/edit/<int:review_id>/<int:book_id>', methods=['GET', 'POST'])
+@login_required
+def edit_review(review_id, book_id):
+    review = Review.query.get_or_404(review_id)
+    form = ReviewForm()
+
+    if form.validate_on_submit():
+        review.rating = form.rating.data
+        review.review_text = form.review_text.data
+        db.session.commit()
+        flash('Your review has been updated.', category='success')
+        return redirect(url_for('preview_page', book_id=book_id))
+
+    # Pre-fill the form with the existing review data
+    form.rating.data = review.rating
+    form.review_text.data = review.review_text
+    return render_template('edit_review.html', form=form, book_id=book_id, review=review)
+
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('q', '').strip().lower()  # Get the search query and convert it to lowercase
+    if query:
+        # Search for books where the title, author, or genre contains the query string (case-insensitive)
+        search_results = Book.query.filter(
+            (func.lower(Book.title).like(f'%{query}%')) |
+            (func.lower(Book.author).like(f'%{query}%')) |
+            (func.lower(Book.genre).like(f'%{query}%'))
+        ).all()
+    else:
+        search_results = []
+
+    return render_template('search_results.html', query=query, search_results=search_results)

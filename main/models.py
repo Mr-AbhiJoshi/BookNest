@@ -18,10 +18,11 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    bio = db.Column(db.Text, nullable=True, default="You haven't added anything to your bio yet. Add something, so others can know you better")
+    bio = db.Column(db.Text, nullable=True, default="I'm trying BookNest and I'm loving it!!")
     icon = db.Column(db.String(100), nullable=True, default='static/user/default.jpg')
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     books = db.relationship('UserBook', backref='user', lazy=True)
+    reviews = db.relationship('Review', backref='user', lazy=True, cascade="all, delete-orphan")
     
     @property
     def password(self):
@@ -52,6 +53,7 @@ class Book(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     readers = db.relationship('UserBook', backref='book', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    reviews = db.relationship('Review', backref='book', lazy=True, cascade="all, delete-orphan")
     
     def __str__(self):
         return self.title
@@ -83,8 +85,6 @@ class Review(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     review_text = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-    user = db.relationship('User', backref=db.backref('reviews', lazy=True))
-    book = db.relationship('Book', backref=db.backref('reviewed', lazy=True))
     
     def __str__(self):
         return self.review_text[:50]

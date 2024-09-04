@@ -253,8 +253,8 @@
                                         review.created_at.strftime('%d-%m-%Y') }}</span>
                                     {% if review.user.id == current_user.id %}
                                     <div class="d-flex">
-                                        <button class="btn btn-primary me-2">&#x270E;Edit</button>
-                                        <form method="POST" action="{{ url_for('delete_review', review_id=review.id) }}"
+                                        <a href="{{ url_for('edit_review', review_id=review.id, book_id=review.book.id) }}" class="btn btn-primary me-2">&#x270E;Edit</a>
+                                        <form method="POST" action="{{ url_for('delete_review', review_id=review.id, book_id=book.id) }}"
                                             onsubmit="return confirm('Are you sure you want to delete this review? This action cannot be undone.');">
                                             <button type="submit" class="btn btn-danger">&#x1f5d1;Delete</button>
                                         </form>
