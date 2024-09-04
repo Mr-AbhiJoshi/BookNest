@@ -11,13 +11,15 @@ class UserBook(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     start_date = db.Column(db.DateTime, default=datetime.now)
-    is_reading = db.Column(db.Boolean, default=True)  # Track if the book is being read
+    is_reading = db.Column(db.Boolean, default=True)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    bio = db.Column(db.Text, nullable=True, default="You haven't added anything to your bio yet. Add something, so others can know you better")
+    icon = db.Column(db.String(100), nullable=True, default='static/user/default.jpg')
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     books = db.relationship('UserBook', backref='user', lazy=True)
     
@@ -81,6 +83,8 @@ class Review(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     review_text = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    user = db.relationship('User', backref=db.backref('reviews', lazy=True))
+    book = db.relationship('Book', backref=db.backref('reviewed', lazy=True))
     
     def __str__(self):
         return self.review_text[:50]

@@ -113,28 +113,159 @@
             align-items: center;
         }
     }
+
+    .review-list ul li .left span {
+        width: 32px;
+        height: 32px;
+        display: inline-block;
+    }
+
+    .review-list ul li .left {
+        flex: none;
+        max-width: none;
+        margin: 0 10px 0 0;
+    }
+
+    .review-list ul li .left span img {
+        border-radius: 50%;
+    }
+
+    .review-list ul li .right h4 {
+        font-size: 16px;
+        margin: 0;
+        display: flex;
+    }
+
+    .review-list ul li .right h4 .gig-rating {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        color: #ffbf00;
+    }
+
+    .review-list ul li .right h4 .gig-rating svg {
+        margin: 0 4px 0 0px;
+    }
+
+    .review-list ul li {
+        border-bottom: 1px solid #dadbdd;
+        padding: 0 0 30px;
+        margin: 0 0 30px;
+    }
+
+    .review-list ul li .right {
+        flex: auto;
+    }
+
+    .review-list ul li .review-description {
+        margin: 20px 0 0;
+    }
+
+    .review-list ul li .review-description p {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .review-list ul li .publish {
+        font-size: 13px;
+        color: #95979d;
+    }
+
+    .review-section h4 {
+        font-size: 20px;
+        color: #222325;
+        font-weight: 700;
+    }
+
+    ul,
+    ul li {
+        list-style: none;
+        margin: 0px;
+    }
+
+    .custom-link {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        padding: 5px 5px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .custom-link:hover {
+        background-color: #007BFF;
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
-</head>
-<body>
 
 <div class="container">
-<div class="book-preview">
-    <div class="book-cover">
-        <img src="{{ url_for('static', filename='images/' + book.title + '.jpg') }}" alt="{{ book.title }}">
-    </div>
-    <div class="book-details">
-        <h2>{{ book.title }}</h2>
-        <p><strong>Author:</strong> {{ book.author }}</p>
-        <p><strong>Genre:</strong> {{ book.genre }}</p>
-        <p><strong>Published Date:</strong> {{ book.published_date }}</p>
-        <div class="book-description">
-            <p>{{ book.description }}</p>
-        </div>
-        <div class="book-actions">
-            <a href="{{ url_for('read_book', book_id=book.id) }}" class="btn btn-primary">Read Now</a>
-            <a href="{{ url_for('review_book', book_id=book.id) }}" class="btn btn-secondary">Review</a>
-        </div>
-    </div>
+    <a href="{{ url_for('home_page') }}" class="btn btn-secondary mb-4">
+        < Go back</a>
+            <div class="book-preview mb-5">
+                <div class="book-cover">
+                    <img src="{{ url_for('static', filename='images/' + book.title + '.jpg') }}" alt="{{ book.title }}">
+                </div>
+                <div class="book-details">
+                    <h2>{{ book.title }}</h2>
+                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>Genre:</strong> {{ book.genre }}</p>
+                    <p><strong>Published Date:</strong> {{ book.published_date }}</p>
+                    <div class="book-description">
+                        <p>{{ book.description }}</p>
+                    </div>
+                    <div class="book-actions">
+                        <a href="{{ url_for('read_book', book_id=book.id) }}" class="btn btn-primary">Read Now</a>
+                        <a href="{{ url_for('review_book', book_id=book.id) }}" class="btn btn-secondary">Review</a>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="my-4">
+                <h3>Reviews from fellow readers</h3>
+            </div>
+            <div class="review-list">
+                <ul>
+                    {% for review in reviews %}
+                    <li>
+                        <div class="d-flex">
+                            <div class="left">
+                                <span>
+                                    <img src="{{ url_for('static', filename=review.user.icon.split('static/')[1]) }}"
+                                        alt="{{ url_for('static', filename='/user/default.jpg') }}" width="30"
+                                        height="30" class="d-inline-block align-text-top">
+                                </span>
+                            </div>
+                            <div class="right">
+                                <h4>
+                                    <a class="custom-link" href="{{ url_for('account_page', user_id=review.user.id) }}"
+                                        style="width: absolute;">{{review.user.username.capitalize()}}</a>
+                                    <span class="gig-rating text-body-2">
+                                        (&#9733;{{review.rating}})
+                                    </span>
+                                </h4>
+                                <div class="review-description">
+                                    <p>
+                                        {{review.review_text}}
+                                    </p>
+                                    <span class="publish py-3 d-inline-block w-100">Published on {{
+                                        review.created_at.strftime('%d-%m-%Y') }}</span>
+                                    {% if review.user.id == current_user.id %}
+                                    <div class="d-flex">
+                                        <button class="btn btn-primary me-2">&#x270E;Edit</button>
+                                        <form method="POST" action="{{ url_for('delete_review', review_id=review.id) }}"
+                                            onsubmit="return confirm('Are you sure you want to delete this review? This action cannot be undone.');">
+                                            <button type="submit" class="btn btn-danger">&#x1f5d1;Delete</button>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                        </div>
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
 </div>
 </div>
 

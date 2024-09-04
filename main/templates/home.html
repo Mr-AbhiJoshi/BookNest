@@ -22,19 +22,19 @@
         background: #fbc2eb;
 
         /* Chrome 10-25, Safari 5.1-6 */
-        background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1));
+        background: -webkit-linear-gradient(to left, #77a1d3, #79cbca, #e684ae);
 
         /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        background: linear-gradient(to right, rgb(255 200 240), rgb(142 184 255))
+        background: linear-gradient(to left, #468de2, #79cbca, #ff78b2)
     }
 </style>
 <main>
-    <div class="p-5 mb-4 bg-body-tertiary rounded-3 gradient-custom-2 text-center">
+    <div class="p-4 mb-4 bg-body-tertiary rounded-3 gradient-custom-2 text-center">
         <div class="container-fluid py-5">
             <small>You might like</small>
             <h1 class="display-5 fw-bold">{{ top_book.title}}</h1>
             <p class="fs-4 text-center">{{ top_book.description }}</p>
-            <button class="btn btn-primary btn-lg" type="button">Read Now</button>
+            <button class="btn btn-dark btn-lg" type="button">Read Now</button>
         </div>
     </div>
 
@@ -101,7 +101,7 @@
             <div class="col-3">
                 <div class="card shadow-sm">
                     <img src="static/cover.png" class="card-img-top" alt="Image description"
-                        style="height: 225px; object-fit: cover;">
+                        style="height: 350px; object-fit: cover;">
                     <div class="card-body">
                         <h4>{{ book.title }}</h4>
                         <p class="card-text">{{ book.description[:50] }}...</p>
