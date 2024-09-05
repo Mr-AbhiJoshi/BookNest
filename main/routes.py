@@ -1,5 +1,5 @@
 from main import app, db
-from flask import render_template, request, redirect,url_for, flash
+from flask import render_template, request, redirect,url_for, flash, session
 from main.models import User, Book, Author, Genre, Review, Category, UserBook, Chapter, Page
 from main.forms import RegisterForm, LoginForm, EditProfileForm, ReviewForm
 from flask_login import login_user, logout_user, login_required, current_user
@@ -206,4 +206,21 @@ def read_book(book_id, chapter_number, page_number):
 @login_required
 def continue_reading(book_id):
     user_book = UserBook.query.filter_by(user_id=current_user.id, book_id=book_id).first_or_404()
-    return redirect(url_for('read_book', book_id=user_book.book_id, chapter_number=user_book.current_chapter, page_number=user_book.current_page))
+    return redirect(url_for('read_book', book_id=user_book.book_id, chapter_number=user_book.last_chapter, page_number=user_book.last_page))
+
+@app.route('/update_reading_progress/<int:book_id>/<int:chapter_number>/<int:page_number>', methods=['POST'])
+def update_reading_progress(book_id, chapter_number, page_number):
+    user_book = UserBook.query.filter_by(user_id=current_user.id, book_id=book_id).first()
+
+    if user_book:
+        user_book.last_chapter = chapter_number
+        user_book.last_page = page_number
+        user_book.is_reading = True
+    else:
+        user_book = UserBook(user_id=current_user.id, book_id=book_id, last_chapter=chapter_number, last_page=page_number)
+        user_book.is_reading = True
+        db.session.add(user_book)
+    
+    db.session.commit()
+    
+    return redirect(url_for('home_page'))

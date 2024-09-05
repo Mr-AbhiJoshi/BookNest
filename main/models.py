@@ -14,6 +14,7 @@ class UserBook(db.Model):
     is_reading = db.Column(db.Boolean, default=True)
     last_chapter = db.Column(db.Integer, nullable=False, default=1)
     last_page = db.Column(db.Integer, nullable=False, default=1)
+    
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

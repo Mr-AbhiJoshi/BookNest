@@ -23,7 +23,7 @@ body {
     background: #ffffff;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    position: fixed;
+    position: absolute;
     height: 100vh;
     overflow-y: auto;
     transition: width 0.3s ease;
@@ -146,11 +146,16 @@ a.nostyle:visited {
     <div class="content">
         <div class="header">
             <h3>Chapter {{ chapter.chapter_number }} - Page {{page.page_number}}</h3>
-            <a href="{{ url_for('preview_page', book_id=book.id) }}" class="btn btn-secondary">Go Back</a>
+            <div class="d-flex">
+            <a href="{{ url_for('home_page') }}" class="btn btn-secondary me-3">Home</a>
+            <form action="{{ url_for('update_reading_progress', book_id=book.id, chapter_number=chapter.chapter_number, page_number=page.page_number) }}" method="post">
+                <button type="submit" class="btn btn-info">Save</button>
+            </form>
+        </div>
         </div>
         <hr />
         <div class="body">
-            <p>{{ page.content }}</p>
+            <p class="px-5 mt-4">{{ page.content }}</p>
         </div>
 
         <div class="navigation">
