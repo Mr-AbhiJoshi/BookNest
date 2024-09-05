@@ -1,6 +1,6 @@
 from main import app, db
 from flask import render_template, request, redirect,url_for, flash
-from main.models import User, Book, Author, Genre, Review, Category, UserBook 
+from main.models import User, Book, Author, Genre, Review, Category, UserBook, Chapter, Page
 from main.forms import RegisterForm, LoginForm, EditProfileForm, ReviewForm
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.orm import joinedload
@@ -85,11 +85,6 @@ def preview_page(book_id):
     book = Book.query.get_or_404(book_id)
     reviews = Review.query.filter_by(book_id=book_id).options(joinedload(Review.user)).order_by(Review.created_at.desc()).all()
     return render_template('preview.html', book=book, reviews=reviews)
-
-@app.route('/read/<int:book_id>')
-def read_book(book_id):
-    book = Book.query.get_or_404(book_id)
-    return render_template('preview.html', book=book)
 
 @app.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
@@ -191,3 +186,24 @@ def search():
         search_results = []
 
     return render_template('search_results.html', query=query, search_results=search_results)
+
+@app.route('/read/<int:book_id>/<int:chapter_number>/<int:page_number>')
+@login_required
+def read_book(book_id, chapter_number, page_number):
+    book = Book.query.get_or_404(book_id)
+    chapter = Chapter.query.filter_by(book_id=book_id, chapter_number=chapter_number).first_or_404()
+    page = Page.query.filter_by(chapter_id=chapter.id, page_number=page_number).first_or_404()
+
+    user_book = UserBook.query.filter_by(user_id=current_user.id, book_id=book_id).first()
+    if user_book:
+        user_book.last_chapter = chapter_number
+        user_book.last_page = page_number
+        db.session.commit()
+
+    return render_template('read_book.html', book=book, chapter=chapter, page=page)
+
+@app.route('/continue_reading/<int:book_id>')
+@login_required
+def continue_reading(book_id):
+    user_book = UserBook.query.filter_by(user_id=current_user.id, book_id=book_id).first_or_404()
+    return redirect(url_for('read_book', book_id=user_book.book_id, chapter_number=user_book.current_chapter, page_number=user_book.current_page))

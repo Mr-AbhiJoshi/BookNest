@@ -202,7 +202,7 @@
 
 <div class="container">
     <a href="{{ url_for('home_page') }}" class="btn btn-secondary mb-4">
-        < Go back</a>
+        < Home</a>
             <div class="book-preview mb-5">
                 <div class="book-cover">
                     <img src="{{ url_for('static', filename='images/' + book.title + '.jpg') }}" alt="{{ book.title }}">
@@ -216,7 +216,7 @@
                         <p>{{ book.description }}</p>
                     </div>
                     <div class="book-actions">
-                        <a href="{{ url_for('read_book', book_id=book.id) }}" class="btn btn-primary">Read Now</a>
+                        <a href="{{ url_for('read_book', book_id=book.id, chapter_number=1, page_number=1) }}" class="btn btn-primary">Read Now</a>
                         <a href="{{ url_for('review_book', book_id=book.id) }}" class="btn btn-secondary">Review</a>
                     </div>
                 </div>

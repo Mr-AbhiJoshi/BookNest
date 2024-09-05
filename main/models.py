@@ -12,6 +12,8 @@ class UserBook(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     start_date = db.Column(db.DateTime, default=datetime.now)
     is_reading = db.Column(db.Boolean, default=True)
+    last_chapter = db.Column(db.Integer, nullable=False, default=1)
+    last_page = db.Column(db.Integer, nullable=False, default=1)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,9 +56,29 @@ class Book(db.Model):
     readers = db.relationship('UserBook', backref='book', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     reviews = db.relationship('Review', backref='book', lazy=True, cascade="all, delete-orphan")
+    chapters = db.relationship('Chapter', backref='book', lazy=True, cascade="all, delete-orphan")
     
     def __str__(self):
         return self.title
+    
+class Chapter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    chapter_number = db.Column(db.Integer, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    pages = db.relationship('Page', backref='chapter', lazy=True, cascade="all, delete-orphan")
+
+    def __str__(self):
+        return f"Chapter {self.chapter_number}"
+
+class Page(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
+    page_number = db.Column(db.Integer, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def __str__(self):
+        return f"Page {self.page_number}"
     
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
