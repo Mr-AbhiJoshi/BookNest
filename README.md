@@ -24,6 +24,7 @@
 ## 📁 Project Structure
 
 BookNest/
+
 ├── main/ # Flask application package
 
 ├── instance/ # Configuration files
@@ -38,7 +39,32 @@ BookNest/
 
 ## 📸 Screenshots
 
-*Include relevant screenshots here to showcase the UI and features.*
+- **Landing Page**
+![Landing Page of the website](screenshots/landing_page.png)
+
+- **Sign Up Prompt**
+![Sign Up Screen](screenshots/sign_up.png)
+
+- **Sign In Prompt**
+![Sign In Screen](screenshots/sign_in.png)
+
+- **Main Page**
+![Main Page of the website](screenshots/main_page.png)
+
+- **Reading Book**
+![Assessment Lab](screenshots/read_book.png)
+
+- **Preview Book**
+![Assessment Lab](screenshots/preview_book.png)
+
+- **Review Book**
+![Assessment Lab](screenshots/review_book.png)
+
+- **Your Profile**
+![Assessment Lab](screenshots/your_profile.png)
+
+- **Edit Profile**
+![Assessment Lab](screenshots/edit_profile.png)
 
 ---
 
